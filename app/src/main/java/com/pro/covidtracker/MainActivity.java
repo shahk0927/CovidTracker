@@ -1,11 +1,20 @@
 package com.pro.covidtracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,9 +38,22 @@ public class MainActivity extends AppCompatActivity {
     RecyclerViewAdapter recyclerViewAdapter;
     private ArrayList<CoronaItem> coronaItemArrayList;
     private RequestQueue requestQueue;
+    SharedPref sharedPreferences;
+    static boolean b = true;
     private TextView dailyDeath, dailyConfirm, dailyRecover, dateHeaders, totalDeath, totalConfirmed, totalRecovered;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = new SharedPref(this);
+        if(!sharedPreferences.loadNightModeState()){
+
+            b=true;
+            setTheme(R.style.AppTheme);
+        }
+        else{
+            b=false;
+            setTheme(R.style.DarkAppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -108,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
                         CoronaItem coronaItem = new CoronaItem(state, death, active, recovered, confirmed, lastUpdated, todayDeath, todayRecovered, todayActive);
 
                         coronaItemArrayList.add(coronaItem);
+                        //Collections.sort(coronaItemArrayList,coronaItem.getState());
                     }
 
                     recyclerViewAdapter= new RecyclerViewAdapter(MainActivity.this, coronaItemArrayList);
-
                     recyclerView.setAdapter(recyclerViewAdapter);
                 }
                 catch(JSONException ex){
@@ -166,4 +189,55 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+
+            case R.id.dark_mode:
+
+                if(b){
+                    sharedPreferences.setNightModeState(true);
+
+                    Anim();
+                   // recreate();
+                    Toast.makeText(MainActivity.this, "Night Mode", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    sharedPreferences.setNightModeState(false);
+
+                    Anim();
+                    //recreate();
+                    Toast.makeText(MainActivity.this, "Light Mode", Toast.LENGTH_SHORT).show();
+                }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public void Anim(){
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                startActivity(intent);
+                finish();
+            }
+        },200);
+    }
+
 }
