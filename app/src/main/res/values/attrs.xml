@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ds">
+        <attr name="backgroundMainColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="deathColor" format="color"/>
+        <attr name="activeColor" format="color"/>
+        <attr name="recoveredColor" format="color"/>
+        <attr name="totalConfirmColor" format="color"/>
+        <attr name="stateColor" format="color"/>
+
+    </declare-styleable>
+
+</resources>

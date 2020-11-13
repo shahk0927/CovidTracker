@@ -2,9 +2,40 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">#0FDD65</item>
+        <item name="colorPrimaryDark">#00D65A</item>
+        <item name="colorAccent">@android:color/black</item>
+        <item name="backgroundColor">#F8F8F8</item>
+        <item name="backgroundMainColor">@android:color/black</item>
+        <item name="textColor" >@color/colorBlack</item>
+        <item name="deathColor">@color/colorDeath</item>
+        <item name="activeColor">@color/colorActive</item>
+        <item name="recoveredColor">@color/colorRecovered</item>
+        <item name="totalConfirmColor">@color/colorTotalConfirm</item>
+        <item name="stateColor">@color/colorState</item>
+        <!-- <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>-->
+
+     </style>
+
+     <style name="DarkAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+         <!-- Customize your theme here. -->
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundMainColor">#303030</item>
+        <item name="backgroundColor">#121212</item>
+        <item name="textColor" >@android:color/white</item>
+        <item name="deathColor">@color/colorDeath</item>
+        <item name="activeColor">@color/colorActive</item>
+        <item name="recoveredColor">#00D65A</item>
+        <item name="totalConfirmColor">@color/colorTotalConfirm</item>
+        <item name="stateColor">#BB86FC</item>
+
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>

@@ -4,45 +4,28 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="2dp"
-    android:orientation="vertical"
+    android:layout_margin="5dp"
     app:cardCornerRadius="10dp"
     tools:ignore="ExtraText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Time"
-            android:textSize="14sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lastUpdated"
-            android:layout_marginStart="20dp"
-            android:textColor="@color/colorAccent"
-            android:textSize="14sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/myLinearLayout"
-        android:layout_marginTop="30dp"
+        android:background="?attr/backgroundColor"
         android:orientation="vertical"
         android:padding="8dp">
 
         <TextView
             android:id="@+id/stateName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="State"
-            android:textSize="18sp"/>
+            android:fontFamily="@font/montserrat"
+            android:textAlignment="center"
+            android:textColor="?attr/stateColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,15 +36,41 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Death"
+                android:fontFamily="@font/montserrat"
+                android:text="Total Confirm Cases:"
+                android:textColor="?attr/totalConfirmColor"
+                android:textSize="18sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/confirmed"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="3"
+                android:textColor="?attr/colorAccent"
                 android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:text="Death:"
+                android:textColor="?attr/deathColor"
+                android:textSize="18sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:id="@+id/death"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:text="3"
-                android:textColor="@color/colorAccent"
+                android:textColor="?attr/colorAccent"
                 android:textSize="18sp"/>
 
             <TextView
@@ -83,15 +92,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active"
-                android:textSize="18sp"/>
+                android:fontFamily="@font/montserrat"
+                android:text="Active:"
+                android:textColor="?attr/activeColor"
+                android:textSize="18sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:id="@+id/active"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:text="3"
-                android:textColor="@color/colorAccent"
+                android:textColor="?attr/colorAccent"
                 android:textSize="18sp"/>
 
             <TextView
@@ -113,15 +124,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recovered"
-                android:textSize="18sp"/>
+                android:fontFamily="@font/montserrat"
+                android:text="Recovered:"
+                android:textColor="?attr/recoveredColor"
+                android:textSize="18sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:id="@+id/recovered"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:text="3"
-                android:textColor="@color/colorAccent"
+                android:textColor="?attr/colorAccent"
                 android:textSize="18sp"/>
 
             <TextView
@@ -134,26 +147,38 @@
 
         </LinearLayout>
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:gravity="end"
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Confirm Cases"
-                android:textSize="18sp"/>
+                android:fontFamily="@font/roboto"
+                android:text="Time :"
+                android:textColor="?attr/textColor"
+                android:gravity="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="16sp" />
             <TextView
                 android:layout_width="wrap_content"
-                android:id="@+id/confirmed"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="3"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"/>
+                android:id="@+id/lastUpdated"
+                android:gravity="start"
+                android:fontFamily="@font/roboto"
+                android:text="11/11/2020 22:22:22"
+                android:layout_gravity="end"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorDate"
+                android:textSize="16sp"/>
         </LinearLayout>
+
 
     </LinearLayout>
 

@@ -1,6 +1,6 @@
 package com.pro.covidtracker;
 
-public class CoronaItem {
+public class CoronaItem{
 
     private String State;
     private String Death;
@@ -95,4 +95,5 @@ public class CoronaItem {
     public void setTodayActive(String todayActive) {
         TodayActive = todayActive;
     }
+
 }
