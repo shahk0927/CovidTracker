@@ -7,8 +7,29 @@
     android:background="?attr/backgroundColor"
     tools:context=".MainActivity">
 
-<LinearLayout
+    <LinearLayout
+        android:id="@+id/spinnerLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="?attr/backgroundColor"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+    <Spinner
+        android:id="@+id/spinner_countries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
     android:id="@+id/headerLinear"
+        android:layout_below="@id/spinnerLinear"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
@@ -57,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/totalConfirmColor"
             android:textSize="12sp"/>
 
         <TextView
@@ -98,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/recoveredColor"
             android:textSize="12sp"/>
 
         <TextView
@@ -140,7 +161,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/deathColor"
             android:textSize="12sp"/>
 
         <TextView
@@ -161,5 +182,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/headerLinear"
         android:background="?attr/backgroundMainColor"/>
+
+
 
 </RelativeLayout>

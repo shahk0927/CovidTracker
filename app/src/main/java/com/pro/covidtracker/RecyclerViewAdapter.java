@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecylcerViewHolder> {
@@ -21,11 +24,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.coronaItemArrayList = coronaItemArrayList;
     }
 
+
+
     @NonNull
     @Override
     public RecylcerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.news_items, parent, false);
-
         return new RecylcerViewHolder(view);
     }
 
@@ -43,15 +47,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String todayActive = coronaItem.getTodayActive();
         String todayRecovered = coronaItem.getTodayRecovered();
 
+        if(state.equals("BC")){
+            holder.state.setText("British Columbia");
+        }
+        else{
         holder.state.setText(state);
+        }
         holder.death.setText(death);
         holder.recovered.setText(recovered);
         holder.active.setText(active);
         holder.confirmed.setText(confirmed);
         holder.lastUpdate.setText(lastUpdt);
-        holder.todayDeath.setText(String.format("(%s)",todayDeath));
-        holder.todayActive.setText(String.format("(%s)",todayActive));
-        holder.todayRecovered.setText(String.format("(%s)",todayRecovered));
+        holder.todayDeath.setText(String.format("+%s", todayDeath));
+        holder.todayActive.setText(String.format("+%s", todayActive));
+        holder.todayRecovered.setText(String.format("+%s",todayRecovered));
 
     }
 

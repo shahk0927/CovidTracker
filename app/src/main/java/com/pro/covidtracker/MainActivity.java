@@ -9,12 +9,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +36,24 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
+    private ArrayList<CountryItem> countryItemArrayList;
+    private CountryAdapter countryAdapter;
     private ArrayList<CoronaItem> coronaItemArrayList;
     private RequestQueue requestQueue;
+    Spinner spinner_state,spinner;
+    ProgressBar progressBar;
+    Timer timer;
     SharedPref sharedPreferences;
+    SharedPreferences LastSelect;
+    int count=0;
+    SharedPreferences.Editor editor;
     static boolean b = true;
     private TextView dailyDeath, dailyConfirm, dailyRecover, dateHeaders, totalDeath, totalConfirmed, totalRecovered;
     @Override
@@ -57,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+      //  progressBar = findViewById(R.id.progressbar);
         dailyConfirm=findViewById(R.id.dailyConfirmed);
         dailyDeath=findViewById(R.id.dailyDeaths);
         dailyRecover=findViewById(R.id.dailyRecovered);
@@ -64,31 +80,87 @@ public class MainActivity extends AppCompatActivity {
         totalRecovered=findViewById(R.id.totalRecovered);
         totalConfirmed=findViewById(R.id.totalConfirmed);
         totalDeath=findViewById(R.id.totalDeaths);
+        spinner = findViewById(R.id.spinner_countries);
+       // spinner_state = findViewById(R.id.spinner_state);
 
         recyclerView=findViewById(R.id.myRecyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerView.setHasFixedSize(true);
-
         coronaItemArrayList = new ArrayList<>();
-        requestQueue = Volley.newRequestQueue(this);
-        jsonParse();
 
+        requestQueue = Volley.newRequestQueue(this);
+
+        initList();
+
+        LastSelect = getSharedPreferences("Last Setting", Context.MODE_PRIVATE);
+        editor=LastSelect.edit();
+       // prog();
+
+
+        final int LastClick = LastSelect.getInt("LastClick",0);
+        countryAdapter = new CountryAdapter(this, countryItemArrayList);
+        spinner.setAdapter(countryAdapter);
+        spinner.setSelection(LastClick);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           @Override
+           public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               CountryItem clickedItem = (CountryItem) adapterView.getItemAtPosition(i);
+
+               editor.putInt("LastClick",i).commit();
+
+               if(i==0){
+
+
+                   jsonParse();
+               }
+               else if(i==1){
+
+                   jsonParseCan();
+                   jsonParseCanHead();
+               }
+           }
+
+           @Override
+           public void onNothingSelected(AdapterView<?> adapterView) {
+
+           }
+       });
+    }
+
+    private void prog() {
+       timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                count++;
+                progressBar.setProgress(count);
+                if(count==100){
+                    timer.cancel();
+                }
+            }
+        };
+        timer.schedule(timerTask,0,100);
+    }
+
+    private void initList() {
+
+        countryItemArrayList = new ArrayList<>();
+        countryItemArrayList.add(new CountryItem(R.drawable.india));
+        countryItemArrayList.add(new CountryItem(R.drawable.canada));
     }
 
     private void jsonParse(){
 
         String url = "https://api.covid19india.org/data.json";
-
-
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
-
                 try{
 
+                    coronaItemArrayList.clear();
                     JSONArray todayAndTotalDataArray = response.getJSONArray("statewise");
                     JSONObject todayAndTotalDataJsonObject= todayAndTotalDataArray.getJSONObject(0);
 
@@ -99,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
 
                     dataHeader= getFormattedDate(dataHeader);
 
-                    dailyConfirm.setText(dailyConfirmed);
-                    dailyDeath.setText(dailyDeaths);
-                    dailyRecover.setText(dailyRec);
+                    dailyConfirm.setText(String.format("+%s", dailyConfirmed));
+                    dailyDeath.setText(String.format("+%s", dailyDeaths));
+                    dailyRecover.setText(String.format("+%s", dailyRec));
                     dateHeaders.setText(dataHeader);
 
                     String totalDeathsFetched = todayAndTotalDataJsonObject.getString("deaths");
@@ -150,9 +222,104 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestQueue.add(request);
+    }
+
+    private void jsonParseCanHead(){
+
+        String url = "https://api.opencovid.ca/";
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+
+                    JSONArray todayAndTotalDataArray = response.getJSONArray("summary");
+                    JSONObject todayAndTotalDataJsonObject = todayAndTotalDataArray.getJSONObject(0);
+
+                    String dailyConfirmed = todayAndTotalDataJsonObject.getString("active_cases_change");
+                    String dailyDeaths = todayAndTotalDataJsonObject.getString("deaths");
+                    String dailyRec = todayAndTotalDataJsonObject.getString("recovered");
+                    String dataHeader = todayAndTotalDataJsonObject.getString("date").substring(0, 5);
+
+                    dataHeader = getFormattedDate(dataHeader);
+
+                    dailyConfirm.setText(String.format("+%s", dailyConfirmed));
+                    dailyDeath.setText(String.format("+%s", dailyDeaths));
+                    dailyRecover.setText(String.format("+%s", dailyRec));
+                    dateHeaders.setText(dataHeader);
+
+                    String totalDeathsFetched = todayAndTotalDataJsonObject.getString("cumulative_deaths");
+                    String totalRecoveredFetched = todayAndTotalDataJsonObject.getString("cumulative_recovered");
+                    String totalConfirmedFetched = todayAndTotalDataJsonObject.getString("cumulative_cases");
+
+                    totalConfirmed.setText(totalConfirmedFetched);
+                    totalDeath.setText(totalDeathsFetched);
+                    totalRecovered.setText(totalRecoveredFetched);
+                }
+                catch(JSONException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(request);
+    }
+
+    private void jsonParseCan(){
+
+        String url = "https://api.opencovid.ca/summary?loc=prov";
 
 
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
 
+                    coronaItemArrayList.clear();
+                    JSONArray todayAndTotalDataArray = response.getJSONArray("summary");
+
+                    for(int i=0;i<todayAndTotalDataArray.length();i++){
+
+                        JSONObject stateWiseArrayJsonObject = todayAndTotalDataArray.getJSONObject(i);
+
+                        String active = stateWiseArrayJsonObject.getString("active_cases");
+                        String death = stateWiseArrayJsonObject.getString("cumulative_deaths");
+                        String recovered = stateWiseArrayJsonObject.getString("cumulative_recovered");
+                        String state = stateWiseArrayJsonObject.getString("province");
+                        String confirmed = stateWiseArrayJsonObject.getString("cumulative_cases");
+                        String lastUpdated = stateWiseArrayJsonObject.getString("date");
+
+                        String todayActive = stateWiseArrayJsonObject.getString("active_cases_change");
+                        String todayDeath = stateWiseArrayJsonObject.getString("deaths");
+                        String todayRecovered = stateWiseArrayJsonObject.getString("recovered");
+
+                        CoronaItem coronaItem = new CoronaItem(state, death, active, recovered, confirmed, lastUpdated, todayDeath, todayRecovered, todayActive);
+
+                        coronaItemArrayList.add(coronaItem);
+                        //Collections.sort(coronaItemArrayList,coronaItem.getState());
+                    }
+
+                    recyclerViewAdapter= new RecyclerViewAdapter(MainActivity.this, coronaItemArrayList);
+                    recyclerView.setAdapter(recyclerViewAdapter);
+                }
+                catch(JSONException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(request);
     }
 
     private String getFormattedDate(String dateHeader){
