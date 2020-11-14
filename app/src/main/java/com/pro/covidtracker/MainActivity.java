@@ -34,8 +34,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -226,30 +229,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void jsonParseCanHead(){
 
-        String url = "https://api.opencovid.ca/";
+        String url = "https://api.covid19tracker.ca/summary";
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
 
-                    JSONArray todayAndTotalDataArray = response.getJSONArray("summary");
+                    JSONArray todayAndTotalDataArray = response.getJSONArray("data");
                     JSONObject todayAndTotalDataJsonObject = todayAndTotalDataArray.getJSONObject(0);
 
-                    String dailyConfirmed = todayAndTotalDataJsonObject.getString("active_cases_change");
-                    String dailyDeaths = todayAndTotalDataJsonObject.getString("deaths");
-                    String dailyRec = todayAndTotalDataJsonObject.getString("recovered");
-                    String dataHeader = todayAndTotalDataJsonObject.getString("date").substring(0, 5);
+                    String dailyConfirmed = todayAndTotalDataJsonObject.getString("change_cases");
+                    String dailyDeaths = todayAndTotalDataJsonObject.getString("change_fatalities");
+                    String dailyRec = todayAndTotalDataJsonObject.getString("change_recoveries");
+                    String dataHeader = todayAndTotalDataJsonObject.getString("latest_date").substring(5, 10);
 
-                    dataHeader = getFormattedDate(dataHeader);
+                    String finals = dataHeader.substring(3,5)+"-"+dataHeader.substring(0,2);
+
+
+
+                    dataHeader =getFormattedDate(finals);
 
                     dailyConfirm.setText(String.format("+%s", dailyConfirmed));
                     dailyDeath.setText(String.format("+%s", dailyDeaths));
                     dailyRecover.setText(String.format("+%s", dailyRec));
                     dateHeaders.setText(dataHeader);
 
-                    String totalDeathsFetched = todayAndTotalDataJsonObject.getString("cumulative_deaths");
-                    String totalRecoveredFetched = todayAndTotalDataJsonObject.getString("cumulative_recovered");
-                    String totalConfirmedFetched = todayAndTotalDataJsonObject.getString("cumulative_cases");
+                    String totalDeathsFetched = todayAndTotalDataJsonObject.getString("total_fatalities");
+                    String totalRecoveredFetched = todayAndTotalDataJsonObject.getString("total_recoveries");
+                    String totalConfirmedFetched = todayAndTotalDataJsonObject.getString("total_cases");
 
                     totalConfirmed.setText(totalConfirmedFetched);
                     totalDeath.setText(totalDeathsFetched);
@@ -294,11 +301,12 @@ public class MainActivity extends AppCompatActivity {
                         String confirmed = stateWiseArrayJsonObject.getString("cumulative_cases");
                         String lastUpdated = stateWiseArrayJsonObject.getString("date");
 
+                        String dataHeader = getFormattedDate(lastUpdated);
                         String todayActive = stateWiseArrayJsonObject.getString("active_cases_change");
                         String todayDeath = stateWiseArrayJsonObject.getString("deaths");
                         String todayRecovered = stateWiseArrayJsonObject.getString("recovered");
 
-                        CoronaItem coronaItem = new CoronaItem(state, death, active, recovered, confirmed, lastUpdated, todayDeath, todayRecovered, todayActive);
+                        CoronaItem coronaItem = new CoronaItem(state, death, active, recovered, confirmed, dataHeader, todayDeath, todayRecovered, todayActive);
 
                         coronaItemArrayList.add(coronaItem);
                         //Collections.sort(coronaItemArrayList,coronaItem.getState());
@@ -404,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        },200);
+        },250);
     }
 
 }

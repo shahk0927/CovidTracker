@@ -78,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/todayRecovered"
                 android:text="3"
-                android:layout_marginStart="20dp"
+                android:textColor="?attr/recoveredColor"
+                android:layout_marginStart="10dp"
                 android:textSize="15sp"/>
 
         </LinearLayout>
@@ -110,7 +111,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/todayDeath"
                 android:text="3"
-                android:layout_marginStart="20dp"
+                android:textColor="?attr/deathColor"
+                android:layout_marginStart="10dp"
                 android:textSize="15sp"/>
 
         </LinearLayout>
@@ -142,7 +144,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/todayActive"
                 android:text="3"
-                android:layout_marginStart="20dp"
+                android:textColor="?attr/activeColor"
+                android:layout_marginStart="10dp"
                 android:textSize="15sp"/>
 
         </LinearLayout>
@@ -155,15 +158,6 @@
             android:gravity="end"
             android:padding="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto"
-                android:text="Time :"
-                android:textColor="?attr/textColor"
-                android:gravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="16sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
